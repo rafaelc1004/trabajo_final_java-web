@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/instituto_java_people">
+<Resource 
+        name="jdbc/mysql"
+        auth="Container"
+        type="javax.sql.DataSource"
+        driverClassName="com.mysql.jdbc.Driver"
+        url="jdbc:mysql://localhost:3306/instituto_jav_people"
+        username="root"
+        password="pinkys1"
+        maxTotal="10"
+        maxIdle="5"
+        maxWaitMillis="-1"
+        
+    />
+    
+    
+</Context>
