@@ -5,6 +5,7 @@
 package classDAO;
 
 import conexion.ConexionesDB;
+import interfaceClass.EstudianteInterfaceDAO;
 import interfaceClass.InterfaceDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,7 +14,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import javaClass.Curso;
 import javaClass.Estudiante;
 import javax.naming.NamingException;
 
@@ -21,12 +21,13 @@ import javax.naming.NamingException;
  *
  * @author Rafaelito
  */
-public class EstudianteDAO implements InterfaceDAO<Estudiante> {
+public class EstudianteDAO implements EstudianteInterfaceDAO {
+   
 
     @Override
     public List<Estudiante> getList() throws SQLException, NamingException {
         try (
-                 Connection conexion = ConexionesDB.getConexion();  
+                Connection conexion = ConexionesDB.getConexion();  
                 Statement st = conexion.createStatement();
             ) {
             ResultSet rs = st.executeQuery("Select * from Estudiante");
@@ -38,11 +39,8 @@ public class EstudianteDAO implements InterfaceDAO<Estudiante> {
                 String nombres = rs.getString("nombresEstudiante");
                 char genero = (rs.getString("genero")).charAt(0);
                 String fono = rs.getString("fono");
-                short idCurso = rs.getShort("idCuso");
-                String nomCurso = getCurso(idCurso);
-                Curso curso = new Curso(idCurso, nomCurso);
                 Estudiante estudiante ;
-                estudiante = new Estudiante(id, rut, apellidos, nombres, genero, fono, curso);
+                estudiante = new Estudiante(id, rut, apellidos, nombres, genero, fono);
                 
                 listaEstudiante.add(estudiante);
 
@@ -52,25 +50,10 @@ public class EstudianteDAO implements InterfaceDAO<Estudiante> {
 
         }
     }
-    
-    private String getCurso(short idCurso) throws SQLException, NamingException{
-        CursoDAO cursoDAO = null;
-        String nomCurso = null;
-        List<Curso> listaCurso = cursoDAO.getList();
-        for(Curso curso : listaCurso){
-            if(curso.getIdCurso() == idCurso){
-                nomCurso = curso.getNombreCurso();
-                break;
-            }
-            
-        }
-        return nomCurso;
-        
-    }
 
     @Override
     public void getCreate(Estudiante estudiante) throws NamingException, SQLException {
-        String sql = "insert into estudiante(rut, apellidosEstudiante, nombresEstudiante, genero, fono, idCurso) values (?,?,?,?,?,?)";
+        String sql = "insert into estudiante(rut, apellidosEstudiante, nombresEstudiante, genero, fono) values (?,?,?,?,?)";
         try(
             Connection conexion = ConexionesDB.getConexion();
             PreparedStatement ps = conexion.prepareStatement(sql);
@@ -82,7 +65,7 @@ public class EstudianteDAO implements InterfaceDAO<Estudiante> {
            ps.setString(3, estudiante.getNombreEstudiante());
            ps.setString(4, String.valueOf(estudiante.getGenero()));
            ps.setString(5, estudiante.getFono());
-           ps.setShort(6, estudiante.getCurso().getIdCurso());
+
 
            int filaInsertada = ps.executeUpdate();
         }
@@ -104,11 +87,8 @@ public class EstudianteDAO implements InterfaceDAO<Estudiante> {
                 String nombres = rs.getString("nombresEstudiante");
                 char genero = (rs.getString("genero")).charAt(0);
                 String fono = rs.getString("fono");
-                short idCurso = rs.getShort("idCurso");
-                String nombreCurso = getCurso(idCurso);
-                Curso curso = new Curso(idCurso, nombreCurso);
                 Estudiante estudiante ;
-                estudiante = new Estudiante(idEstudiante, rut, apellidos, nombres, genero, fono, curso);
+                estudiante = new Estudiante(idEstudiante, rut, apellidos, nombres, genero, fono);
                 
                 return estudiante;
             }else{
@@ -128,7 +108,6 @@ public class EstudianteDAO implements InterfaceDAO<Estudiante> {
                 + "nombresEstudiante = ?"
                 + "genero = ?"
                 + "fono = ?"
-                + "idCurso = ?"
                 + "Where idEstudiante = ?";
         try(
                 Connection conexion = ConexionesDB.getConexion();
@@ -141,7 +120,6 @@ public class EstudianteDAO implements InterfaceDAO<Estudiante> {
             ps.setString(3, estudiante.getNombreEstudiante());
             ps.setString(4, String.valueOf(estudiante.getGenero()));
             ps.setString(5, estudiante.getFono());
-            ps.setShort(6, estudiante.getCurso().getIdCurso());
             
             int filaActualizada = ps.executeUpdate();
         }
@@ -150,8 +128,17 @@ public class EstudianteDAO implements InterfaceDAO<Estudiante> {
 
 
     @Override
-    public void getDelete(short s) throws SQLException, NamingException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void getDelete(short id) throws SQLException, NamingException {
+        
+        String sql = "Delete Estudiantes where idEstudiante = ?";
+        try(
+                Connection conexion = ConexionesDB.getConexion();
+                PreparedStatement ps = conexion.prepareStatement(sql);
+                ){
+            
+            ps.setInt(1, id);
+            int filaEliminada = ps.executeUpdate();
+        }
     }
 
 }

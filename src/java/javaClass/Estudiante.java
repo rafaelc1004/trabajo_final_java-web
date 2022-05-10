@@ -9,16 +9,16 @@ public class Estudiante {
     private String nombreEstudiante;
     private char genero;
     private String fono;
-    private Curso curso;
 
-    public Estudiante(short idEstudiante, String rut, String apellidoEstudiante, String nombreEstudiante, char genero, String fono, Curso curso) {
+
+    public Estudiante(short idEstudiante, String rut, String apellidoEstudiante, String nombreEstudiante, char genero, String fono) {
         this.idEstudiante = idEstudiante;
         this.rut = rut;
         this.apellidoEstudiante = apellidoEstudiante;
         this.nombreEstudiante = nombreEstudiante;
         this.genero = genero;
         this.fono = fono;
-        this.curso = curso;
+
     }
     
     public Estudiante(){
@@ -76,16 +76,6 @@ public class Estudiante {
     public void setFono(String fono) {
         this.fono = fono;
     }
-
-    public Curso getCurso() {
-        return curso;
-    }
-
-    public void setCurso(Curso curso) {
-        this.curso = curso;
-    }
-    
-    
     
     
 }
