@@ -2,7 +2,7 @@
 package classDAO;
 
 import conexion.ConexionesDB;
-import interfaceClass.InterfaceDAO;
+import interfaceClass.AsignaturaInterfaceDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,7 +13,7 @@ import java.util.List;
 import javaClass.Asignatura;
 import javax.naming.NamingException;
 
-public class AsignaturaDAO implements InterfaceDAO<Asignatura>{
+public class AsignaturaDAO implements AsignaturaInterfaceDAO{
 
     @Override
     public void getCreate(Asignatura asignatura) throws SQLException, NamingException {
@@ -106,5 +106,6 @@ public class AsignaturaDAO implements InterfaceDAO<Asignatura>{
             ps.executeUpdate();
         }
     }
+
 
 }

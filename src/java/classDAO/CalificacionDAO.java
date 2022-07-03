@@ -1,4 +1,3 @@
-
 package classDAO;
 
 import conexion.ConexionesDB;
@@ -15,160 +14,123 @@ import javaClass.Calificacion;
 import javaClass.Estudiante;
 import javax.naming.NamingException;
 
-public class CalificacionDAO implements CalificacionInterfaceDao{
+public class CalificacionDAO implements CalificacionInterfaceDao {
 
-    @Override
-    public void getCreate(Calificacion calificacion) throws SQLException, NamingException {
-        String sql = "Insert into Calificaciones(idAsignatura, idEstudiante, numCalificacion, calificacion) values(?,?,?,?)";
-        try(
-            Connection conexion = ConexionesDB.getConexion();
-            PreparedStatement ps = conexion.prepareStatement(sql)
-                ){
-            ps.setShort(1, calificacion.getAsignatura().getIdAsignatura());
-            ps.setShort(2, calificacion.getEstudiante().getIdEstudiante());
-            ps.setShort(3, calificacion.getNumCalificacion());
-            ps.setDouble(4, calificacion.getNota());
-            
+    private AsignaturaDAO asignaturaDAO = new AsignaturaDAO();
+    private EstudianteDAO estudianteDAO = new EstudianteDAO();
+
+    public CalificacionDAO(EstudianteDAO estudianteDAO, AsignaturaDAO asignaturaDAO) {
+        this.asignaturaDAO = asignaturaDAO;
+        this.estudianteDAO = estudianteDAO;
+    }
+
+    public CalificacionDAO() {
+
+    }
+
+    public void getAddAsignatura(short idStudent, short idCourse) throws NamingException, SQLException {
+        String sql = "insert into calificaciones(idEstudiante, idAsignatura) values(?,?)";
+        try (
+            Connection conexion = ConexionesDB.getConexion();  PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setShort(1, idStudent);
+            ps.setShort(2, idCourse);
+
             int filaIngresada = ps.executeUpdate();
         }
     }
 
     @Override
     public List<Calificacion> getList() throws SQLException, NamingException {
-        
-        try(
-                Connection conexion = ConexionesDB.getConexion();
-                Statement st = conexion.createStatement();
-                
-                ){
+
+        try (
+                 Connection conexion = ConexionesDB.getConexion();  Statement st = conexion.createStatement();) {
             List<Calificacion> listaCalificacion = new ArrayList<>();
             ResultSet rs = st.executeQuery("Select * from Calificaciones");
-            while(rs.next()){
+            while (rs.next()) {
                 short idAsignatura = rs.getShort("idAsignatura");
-                String nomAsignatura = getAsignatura(idAsignatura);
-                Asignatura asignatura = new Asignatura(idAsignatura, nomAsignatura);
+                Asignatura asignatura = asignaturaDAO.getSearch(idAsignatura);
                 short idEstudiante = rs.getShort("idEstudiante");
-                Estudiante estudiante = getEstudiante(idEstudiante);
-                short numCalificacion = rs.getShort("numCalificacion");
-                double nota = rs.getDouble("calificacion");
-                
-                Calificacion calificacion = new Calificacion(numCalificacion, nota, asignatura, estudiante);
-                
+                Estudiante estudiante = estudianteDAO.getSearch(idEstudiante);
+                double nota1 = rs.getDouble("nota1");
+                double nota2 = rs.getDouble("nota2");
+                double nota3 = rs.getDouble("nota3");
+                double nota4 = rs.getDouble("nota4");
+                double nota5 = rs.getDouble("nota5");
+                double promedio = rs.getDouble("promedio");
+
+                Calificacion calificacion = new Calificacion(estudiante, asignatura, nota1, nota2, nota3, nota4, nota5, promedio);
+
                 listaCalificacion.add(calificacion);
             }
             return listaCalificacion;
-            
+
         }
-    }
-    
-    private String getAsignatura(short idAsignatura) throws SQLException, NamingException{
-        AsignaturaDAO asignaturaDAO = null;
-        String nomAsignatura = null;
-        List<Asignatura> listaAsignatura = asignaturaDAO.getList();
-        for(Asignatura asignatura : listaAsignatura){
-            if(asignatura.getIdAsignatura() == idAsignatura){
-                nomAsignatura = asignatura.getNombreAsignatura();
-                break;
-            }
-            
-        }
-        return nomAsignatura;
-        
-    }
-    
-    private Estudiante getEstudiante(short idEstudiante) throws SQLException, NamingException{
-        EstudianteDAO estudianteDAO = null;
-        
-        Estudiante alumno = null;
-        String rut = null;
-        String apellido = null;       
-        String nombre = null;
-        char genero;
-        String fono = null;
-        
-        List<Estudiante> listaEstudiante = estudianteDAO.getList();
-        for(Estudiante estudiante : listaEstudiante){
-            if(estudiante.getIdEstudiante() == idEstudiante){
-   
-            rut = estudiante.getRut();
-            apellido = estudiante.getApellidoEstudiante();
-            nombre = estudiante.getNombreEstudiante();
-            genero = estudiante.getGenero();
-            fono = estudiante.getFono();
-            
-            alumno = new Estudiante(idEstudiante, rut, apellido, nombre, genero, fono);
-                break;
-            }
-            
-        }
-        return alumno;
-        
     }
 
-   
-    public List<Calificacion> getSearch(short idAsignatura, short idEstudiante) throws SQLException, NamingException {
-    
-        List<Calificacion> listaNotas = new ArrayList<>();
-        String sql = "Select * from Calificaciones where idAsignatura = ? && idEstudiante = ?";
-        try(
-                Connection conexion = ConexionesDB.getConexion();
-                PreparedStatement ps = conexion.prepareStatement(sql);
-                ){
-            
-            ps.setShort(1, idAsignatura);
-            ps.setShort(2, idEstudiante);
-            ResultSet rs = ps.executeQuery();
-            while(rs.next()){
-                short numCalificacion = rs.getShort("numCalificacion");
-                double nota = rs.getDouble("calificacion");
-                Estudiante alumno = getEstudiante(idEstudiante);
-                String  nomAsignatura = getAsignatura(idAsignatura);
-                Asignatura asignatura = new Asignatura(idAsignatura, nomAsignatura);
-                Calificacion calificacion = new Calificacion(numCalificacion, nota, asignatura, alumno);
-                listaNotas.add(calificacion);
-                
-            }
-            
-            return listaNotas;
-        }
-        
-    }
-    
+    @Override
+    public void getDelete(short idEstud, short idAsig) throws SQLException, NamingException {
 
- 
-    public void getDelete(short idEstud, short idAsig, short numCalif) throws SQLException, NamingException {
-        
-        String sql = "Delete Calificaciones where idEstudiante = ? && idAsignatura = ? && numCalificacion = ?";
-        
-        try(
-                Connection conexion = ConexionesDB.getConexion();
-                PreparedStatement ps = conexion.prepareStatement(sql);
-                
-                ){
-            
+        String sql = "Delete Calificaciones where idEstudiante = ? && idAsignatura = ?";
+
+        try (
+                 Connection conexion = ConexionesDB.getConexion();  PreparedStatement ps = conexion.prepareStatement(sql);) {
+
             ps.setShort(1, idEstud);
             ps.setShort(2, idAsig);
-            ps.setShort(3, numCalif);
-            
+
             int filaEliminada = ps.executeUpdate();
         }
     }
 
     @Override
     public void getUpdate(Calificacion calificacion) throws SQLException, NamingException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+
+        String sql = "Update Calificaciones set nota1 = ?, nota2=?, nota3=?, nota4=?, nota5=? where idEstudiante = ?  && idAsignatura = ? ";
+        try (
+                 Connection conexion = ConexionesDB.getConexion();  PreparedStatement ps = conexion.prepareStatement(sql);) {
+
+            ps.setDouble(1, calificacion.getNota1());
+            ps.setDouble(2, calificacion.getNota2());
+            ps.setDouble(3, calificacion.getNota3());
+            ps.setDouble(4, calificacion.getNota4());
+            ps.setDouble(4, calificacion.getNota5());
+            ps.setShort(4, calificacion.getEstudiante().getIdEstudiante());
+            ps.setShort(4, calificacion.getAsignatura().getIdAsignatura());
+
+            int filaActualizada = ps.executeUpdate();
+        }
+
+    }
+    
+    //Recupera la lista de asignaturas y calificaciones que tiene el alumno seleccionado en la pagina anterior  
+    public List<Calificacion> getListCoursesStudent(short id) throws NamingException, SQLException{
+        String sql = "select * from calificaciones where idEstudiante =?";
+        List<Calificacion> listaCalificacion = new ArrayList<>();
+        try(
+            Connection conexion = ConexionesDB.getConexion();
+            PreparedStatement ps = conexion.prepareStatement(sql);
+        ){
+            ps.setShort(1, id);
+            
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                short idAsignatura = rs.getShort("idAsignatura");
+                Asignatura asignatura = asignaturaDAO.getSearch(idAsignatura);
+                short idEstudiante = rs.getShort("idEstudiante");
+                Estudiante estudiante = estudianteDAO.getSearch(idEstudiante);
+                double nota1 = rs.getDouble("nota1");
+                double nota2 = rs.getDouble("nota2");
+                double nota3 = rs.getDouble("nota3");
+                double nota4 = rs.getDouble("nota4");
+                double nota5 = rs.getDouble("nota5");
+                double promedio = rs.getDouble("promedio");
+  
+                Calificacion calificacion = new Calificacion(estudiante, asignatura, nota1, nota2, nota3, nota4, nota5, promedio);
+                
+                listaCalificacion.add(calificacion);
+            }
+            return listaCalificacion;
+        }
     }
 
-    @Override
-    public Calificacion getSearch(short id) throws SQLException, NamingException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void getDelete(short id) throws SQLException, NamingException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-    
-    
-    
 }

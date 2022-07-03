@@ -18,8 +18,6 @@ public class Asignatura {
     public Asignatura() {
     }
 
-    
-    
     public short getIdAsignatura() {
         return idAsignatura;
     }

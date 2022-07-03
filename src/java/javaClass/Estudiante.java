@@ -20,7 +20,15 @@ public class Estudiante {
         this.fono = fono;
 
     }
-    
+
+    public Estudiante(String rut, String apellidoEstudiante, String nombreEstudiante, char genero, String fono) {
+        this.rut = rut;
+        this.apellidoEstudiante = apellidoEstudiante;
+        this.nombreEstudiante = nombreEstudiante;
+        this.genero = genero;
+        this.fono = fono;
+    }
+
     public Estudiante(){
         
     }

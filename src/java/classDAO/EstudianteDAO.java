@@ -6,7 +6,6 @@ package classDAO;
 
 import conexion.ConexionesDB;
 import interfaceClass.EstudianteInterfaceDAO;
-import interfaceClass.InterfaceDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,10 +29,10 @@ public class EstudianteDAO implements EstudianteInterfaceDAO {
                 Connection conexion = ConexionesDB.getConexion();  
                 Statement st = conexion.createStatement();
             ) {
-            ResultSet rs = st.executeQuery("Select * from Estudiante");
+            ResultSet rs = st.executeQuery("Select * from Estudiantes");
             List<Estudiante> listaEstudiante = new ArrayList<>();
             while (rs.next()) {
-                short id = rs.getShort("idEstudiate");
+                short id = rs.getShort("idEstudiante");
                 String rut = rs.getString("rut");
                 String apellidos = rs.getString("apellidosEstudiante");
                 String nombres = rs.getString("nombresEstudiante");
@@ -53,7 +52,7 @@ public class EstudianteDAO implements EstudianteInterfaceDAO {
 
     @Override
     public void getCreate(Estudiante estudiante) throws NamingException, SQLException {
-        String sql = "insert into estudiante(rut, apellidosEstudiante, nombresEstudiante, genero, fono) values (?,?,?,?,?)";
+        String sql = "insert into estudiantes(rut, apellidosEstudiante, nombresEstudiante, genero, fono) values (?,?,?,?,?)";
         try(
             Connection conexion = ConexionesDB.getConexion();
             PreparedStatement ps = conexion.prepareStatement(sql);
@@ -71,24 +70,24 @@ public class EstudianteDAO implements EstudianteInterfaceDAO {
         }
     }
 
+    @Override
     public Estudiante getSearch(short id) throws NamingException, SQLException {
         String sql="select * from Estudiantes where idEstudiante = ? ";
         try(
                 Connection conexion = ConexionesDB.getConexion();
                 PreparedStatement ps = conexion.prepareStatement(sql);
             ){
+            ps.setShort(1, id);
             
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
-                
-                short idEstudiante = rs.getShort("idAsignatura");
                 String rut = rs.getString("rut");
                 String apellidos = rs.getString("apellidosEstudiante");
                 String nombres = rs.getString("nombresEstudiante");
                 char genero = (rs.getString("genero")).charAt(0);
                 String fono = rs.getString("fono");
                 Estudiante estudiante ;
-                estudiante = new Estudiante(idEstudiante, rut, apellidos, nombres, genero, fono);
+                estudiante = new Estudiante(id, rut, apellidos, nombres, genero, fono);
                 
                 return estudiante;
             }else{
@@ -104,9 +103,9 @@ public class EstudianteDAO implements EstudianteInterfaceDAO {
     public void getUpdate(Estudiante estudiante) throws NamingException, SQLException {
         String sql ="update estudiantes set "
                 + "rut = ?,"
-                + "apellidosEstudiante = ?"
-                + "nombresEstudiante = ?"
-                + "genero = ?"
+                + "apellidosEstudiante = ?,"
+                + "nombresEstudiante = ?,"
+                + "genero = ?,"
                 + "fono = ?"
                 + "Where idEstudiante = ?";
         try(
@@ -136,7 +135,7 @@ public class EstudianteDAO implements EstudianteInterfaceDAO {
                 PreparedStatement ps = conexion.prepareStatement(sql);
                 ){
             
-            ps.setInt(1, id);
+            ps.setShort(1, id);
             int filaEliminada = ps.executeUpdate();
         }
     }

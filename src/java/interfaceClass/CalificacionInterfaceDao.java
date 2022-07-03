@@ -15,10 +15,10 @@ import javax.naming.NamingException;
  */
 public interface CalificacionInterfaceDao extends InterfaceDAO<Calificacion>{
     
-    public void getCreate(Calificacion calificacion) throws SQLException, NamingException;
+    @Override
     public List<Calificacion> getList() throws SQLException, NamingException;
-    public Calificacion getSearch(short id) throws SQLException, NamingException;
-    public void getDelete(short id)throws SQLException, NamingException;
+    public void getDelete(short idStudent, short idCourse)throws SQLException, NamingException;
+    @Override
     public void getUpdate(Calificacion calificacion) throws SQLException, NamingException;
     
 }
