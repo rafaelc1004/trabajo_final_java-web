@@ -5,11 +5,12 @@
         <group>
             <file>file:/C:/Users/Rafaelito/Documents/Proyectos%20Java%202022/Netbeans%20JEE/instituto_java_people/src/java/servlet/AlumnoControlador.java</file>
             <file>file:/C:/Users/Rafaelito/Documents/Proyectos%20Java%202022/Netbeans%20JEE/instituto_java_people/web/WEB-INF/jsp/calificacion/add-calificacion.jsp</file>
+            <file>file:/C:/Users/Rafaelito/Documents/Proyectos%20Java%202022/Netbeans%20JEE/instituto_java_people/src/java/javaClass/Asignatura.java</file>
             <file>file:/C:/Users/Rafaelito/Documents/Proyectos%20Java%202022/Netbeans%20JEE/instituto_java_people/web/WEB-INF/jsp/estudiante/list-student.jsp</file>
             <file>file:/C:/Users/Rafaelito/Documents/Proyectos%20Java%202022/Netbeans%20JEE/instituto_java_people/web/WEB-INF/jsp/calificacion/list-calificaciones-alumno.jsp</file>
+            <file>file:/C:/Users/Rafaelito/Documents/Proyectos%20Java%202022/Netbeans%20JEE/instituto_java_people/web/WEB-INF/jsp/asignatura/add-asignatura.jsp</file>
             <file>file:/C:/Users/Rafaelito/Documents/Proyectos%20Java%202022/Netbeans%20JEE/instituto_java_people/src/java/servlet/ControladorCalificacion.java</file>
             <file>file:/C:/Users/Rafaelito/Documents/Proyectos%20Java%202022/Netbeans%20JEE/instituto_java_people/src/java/javaClass/Calificacion.java</file>
-            <file>file:/C:/Users/Rafaelito/Documents/Proyectos%20Java%202022/Netbeans%20JEE/instituto_java_people/web/WEB-INF/jsp/asignatura/add-asignatura.jsp</file>
             <file>file:/C:/Users/Rafaelito/Documents/Proyectos%20Java%202022/Netbeans%20JEE/instituto_java_people/src/java/servlet/ControladorAsignatura.java</file>
             <file>file:/C:/Users/Rafaelito/Documents/Proyectos%20Java%202022/Netbeans%20JEE/instituto_java_people/web/WEB-INF/jsp/estudiante/form-student.jsp</file>
             <file>file:/C:/Users/Rafaelito/Documents/Proyectos%20Java%202022/Netbeans%20JEE/instituto_java_people/src/java/classDAO/CalificacionDAO.java</file>

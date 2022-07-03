@@ -100,7 +100,7 @@ public class ControladorAsignatura extends HttpServlet {
                PrintWriter pr = response.getWriter();
 
         if(opcion.equalsIgnoreCase("addRamoStudent")){
-            
+            vista = "/index.jsp";
             
             try {
                 short idStudent = Short.parseShort(request.getParameter("id"));
@@ -109,17 +109,17 @@ public class ControladorAsignatura extends HttpServlet {
                 asignatura = asignaturaDao.getSearch(idAsignatura);
                 calificacion = new Calificacion(estudiante, asignatura);
                 calificacionDao.getAddAsignatura(idStudent, idAsignatura);
+               
                 
             } catch (NamingException | SQLException ex) {
 
                 ex.printStackTrace();
             }
-          
             
+            request.getRequestDispatcher(vista).forward(request, response);
             
         }
-        
-        
+   
     }
 
   

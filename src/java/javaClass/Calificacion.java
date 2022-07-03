@@ -31,6 +31,16 @@ public class Calificacion {
         this.asignatura = asignatura;
     }
     
+    public Calificacion(Estudiante estudiante, Asignatura asignatura, double nota1, double nota2, double nota3, double nota4, double nota5) {
+        this.estudiante = estudiante;
+        this.asignatura = asignatura;
+        this.nota1 = nota1;
+        this.nota2 = nota2;
+        this.nota3 = nota3;
+        this.nota4 = nota4;
+        this.nota5 = nota5;        
+    }
+    
     public Calificacion(){
         
     }

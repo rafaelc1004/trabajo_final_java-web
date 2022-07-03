@@ -29,6 +29,7 @@ public class ControladorCalificacion extends HttpServlet {
     private  CalificacionDAO calificacionDao;
     private List<Calificacion> listaAsignaturaCalificacion;
     private AsignaturaDAO asignaturaDao;
+    private Calificacion calificacion;
 
     public ControladorCalificacion(){
         super();
@@ -38,6 +39,7 @@ public class ControladorCalificacion extends HttpServlet {
     public void init() throws ServletException {
         super.init();
 
+        this.calificacion = new Calificacion();
         this.asignaturaDao = new AsignaturaDAO();
         this.estudianteDao = new EstudianteDAO();
         this.calificacionDao = new CalificacionDAO();
@@ -54,12 +56,25 @@ public class ControladorCalificacion extends HttpServlet {
         String accion = request.getParameter("accion");
         String vistaJSP = "";
         PrintWriter pr = response.getWriter();
-        
+                
         switch (accion) {
             case "edit":
+
+                short idAsignatura = Short.parseShort(request.getParameter("idCourse"));
+                short idEstudiante = Short.parseShort(request.getParameter("idEstudiante"));
+
+                try {
+                    calificacion = calificacionDao.getCalificacionStudent(idEstudiante, idAsignatura);
+                } catch (SQLException | NamingException ex) {
+                    ex.printStackTrace();
+                } 
+                
+                request.setAttribute("calificacion", calificacion);
                 vistaJSP = "/WEB-INF/jsp/calificacion/add-calificacion.jsp";
                 request.getRequestDispatcher(vistaJSP).forward(request, response);
                 break;
+                
+
                 
                 // se buscan todas las asignaturas en la que esta asociado el alumno y sus calificaciones
                 // y se envia a la siguiente pagina para que sean mostradas
@@ -86,8 +101,16 @@ public class ControladorCalificacion extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-    }
+        
+        short idStudent = Short.parseShort(request.getParameter("idEstudiante"));
+        short idCourse = Short.parseShort(request.getParameter("idAsignatura"));
+        double nota1 = Short.parseShort(request.getParameter("txtNota1"));
+        double nota2 = Short.parseShort(request.getParameter("txtNota2"));
+        double nota3 = Short.parseShort(request.getParameter("txtNota3"));
+        double nota4 = Short.parseShort(request.getParameter("txtNota4"));
+        double nota5 = Short.parseShort(request.getParameter("txtNota5"));
+        
+    }   
 
     @Override
     public String getServletInfo() {

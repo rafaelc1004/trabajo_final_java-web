@@ -132,5 +132,60 @@ public class CalificacionDAO implements CalificacionInterfaceDao {
             return listaCalificacion;
         }
     }
+    
+    public Calificacion getCalificacionStudent(short idStudent, short idCourse) throws SQLException, NamingException {
+        String sql = "Select * from calificaciones where idEstudiante = ? and idAsignatura=?";
+        Calificacion calificacion = new Calificacion();
+        try (
+                 Connection conexion = ConexionesDB.getConexion();  
+                PreparedStatement ps = conexion.prepareStatement(sql);
+                ) {
+            
+            ps.setShort(1, idStudent);
+            ps.setShort(2, idCourse);
+    
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                short idAsignatura = rs.getShort("idAsignatura");
+                Asignatura asignatura = asignaturaDAO.getSearch(idAsignatura);
+                short idEstudiante = rs.getShort("idEstudiante");
+                Estudiante estudiante = estudianteDAO.getSearch(idEstudiante);
+                double nota1 = rs.getDouble("nota1");
+                double nota2 = rs.getDouble("nota2");
+                double nota3 = rs.getDouble("nota3");
+                double nota4 = rs.getDouble("nota4");
+                double nota5 = rs.getDouble("nota5");
+                double promedio = rs.getDouble("promedio");
+
+                calificacion = new Calificacion(estudiante, asignatura, nota1, nota2, nota3, nota4, nota5, promedio);
+
+                
+            }
+            return calificacion;
+
+        }
+    }
+    
+    public void getUpdateCalificacion(Calificacion calificacion) throws SQLException, NamingException {
+        String sql = "update Calificaciones set nota1 = ?, nota2 = ?, nota3 =?, nota4 = ?, nota5 =? where idEstudiante = ? and idAsignatura = ?";
+        
+        try (
+                 Connection conexion = ConexionesDB.getConexion();  
+                PreparedStatement ps = conexion.prepareStatement(sql);
+                ) {
+            
+            ps.setDouble(1, calificacion.getNota1());
+            ps.setDouble(2, calificacion.getNota2());
+            ps.setDouble(3, calificacion.getNota3());
+            ps.setDouble(4, calificacion.getNota4());
+            ps.setDouble(5, calificacion.getNota5());
+            ps.setShort(6, calificacion.getEstudiante().getIdEstudiante());
+            ps.setShort(7, calificacion.getAsignatura().getIdAsignatura());
+    
+            ResultSet rs = ps.executeQuery();
+           
+
+        }
+    }
 
 }

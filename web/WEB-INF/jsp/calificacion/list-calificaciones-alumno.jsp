@@ -72,7 +72,7 @@
                     <td><c:out value="${ramo.promedio}" /></td>
 
 
-                    <td><a href="/instituto_java_people/ControladorCalificacion?accion=edit&amp;id=${estudiante.idEstudiante}">Editar nota</a></td>
+                    <td><a href="/instituto_java_people/ControladorCalificacion?accion=edit&amp;idEstudiante=${ramo.estudiante.idEstudiante}&idCourse=${ramo.asignatura.idAsignatura}">Editar nota</a></td>
                     </tr>
                 </c:forEach>			
                 </tbody>
